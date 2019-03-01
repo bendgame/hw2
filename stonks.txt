@@ -1,0 +1,52 @@
+Sub LoadArray()
+    Dim nArray As Variant
+    Dim TotalRows As Long
+   Dim darray As Variant
+    
+    TotalRows = Rows(Rows.Count).End(xlUp).Row
+    tarray = Range(Cells(2, 6), Cells(TotalRows, 6)).Value
+    nArray = Range(Cells(2, 6), Cells(TotalRows, 6)).Value
+    MsgBox "Loaded " & UBound(nArray) & " items!"
+
+Dim arr As New Collection, a
+Dim aFirstArray() As Variant
+Dim i As Long
+
+aFirstArray() = tarray
+On Error Resume Next
+For Each a In aFirstArray
+arr.Add a, a
+Next
+   ' MsgBox "Loaded " & UBound(aFirstArray) & " items!"
+For i = 1 To arr.Count
+Cells(i, 10).Value = arr(i)
+
+ Dim arr2 As New Collection, b
+    Dim bfirstarray() As Variant
+    Dim j As Long
+
+    bfirstarray() = nArray
+    On Error Resume Next
+    For Each b In bfirstarray
+    arr2.Add b, b
+    Next
+        ' MsgBox "Loaded " & UBound(bfirstarray) & " items!"
+    For j = 1 To arr.Count
+    ''If Cells(j, 10).vaule = arr(i) Then
+    Cells(i, 11).Value = arr2(j)
+    ''End If
+ 
+    Next j
+
+
+Next i
+   
+    
+
+
+   ' summeda = Application.WorksheetFunction.Sum(nArray)
+   ' Range("I2").Value = summeda
+     
+    'Cells(2, 9).Value = "testingek1"
+    
+End Sub
