@@ -1,0 +1,68 @@
+Sub stock_hw()
+
+Dim total_rows As Long
+Dim sym_array() As Variant
+Dim total_volume As Double
+Dim h As Long
+Dim i As Long
+Dim j As Long
+Dim unique_syms As New Collection, sym
+Dim ws As Worksheet
+Dim ws_count As Long
+Dim volume_index As Long
+
+'store number of worksheets to loop through them
+
+ws_count = ActiveWorkbook.Worksheets.Count
+
+For Each ws In Worksheets
+'For h = 1 To ws_count
+    ws.Activate
+'calculate the total rows to use in the array range
+    total_rows = Rows(Rows.Count).End(xlUp).Row
+    ws_count = ActiveWorkbook.Worksheets.Count
+'add stock ticks to array
+    sym_array = Range(Cells(2, 1), Cells(total_rows, 1)).Value
+'loop through array to find distinct values and add them to a collection object
+  
+    On Error Resume Next
+    For Each sym In sym_array
+    unique_syms.Add sym, sym
+    Next
+    
+    
+    
+'populate column J with distinct sym values
+        For i = 1 To unique_syms.Count
+        Cells(i + 1, 10).Value = unique_syms(i)
+       Next i
+        
+'check to see if the distinct value = sym and total the volume if it does
+       'Cells(1, 13).Value = Cells(2, 1).Value
+       'Cells(1, 14).Value = Cells(2, 10).Value
+        
+        volume_index = 1
+        For j = 2 To total_rows + 1
+            If Cells(j, 1).Value = Cells(volume_index + 1, 10).Value Then
+               total_volume = Cells(j, 7).Value + total_volume
+               
+            Else
+                Cells(volume_index + 1, 11).Value = total_volume
+                'Exit For
+                volume_index = volume_index + 1
+                total_volume = 0
+                j = j - 1
+            End If
+            'volume_index = volume_index + 1
+        
+    Next j
+    
+
+
+'Cells(i, 11).Value = total_volume
+ 'MsgBox ActiveWorkbook.Worksheets(h).Name
+
+'Next h
+Next ws
+
+End Sub
