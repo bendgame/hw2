@@ -1,0 +1,72 @@
+Sub stock_hw()
+
+Dim total_rows As Long
+Dim sym_array() As Variant
+Dim total_volume As Double
+Dim h As Long
+Dim i As Long
+Dim j As Long
+Dim unique_syms As New Collection, sym
+Dim ws As Worksheet
+Dim unique_index As Double
+
+
+'Creates the loop to go through each worksheet in the workbook
+For Each ws In Worksheets
+
+    'activate the worksheet
+    ws.Activate
+
+    'calculate the total rows to use in the array range
+    total_rows = Rows(Rows.Count).End(xlUp).Row
+    
+    'add stock tickers to array
+    sym_array = Range(Cells(2, 1), Cells(total_rows, 1)).Value
+
+    'loop through array to find distinct values and add them to a collection object
+    'set the collection to Nothing to reset it on each worksheet
+    Set unique_syms = Nothing
+    On Error Resume Next
+    For Each sym In sym_array
+    unique_syms.Add sym, sym
+    Next
+    
+    
+    
+'populate column J with distinct ticker values
+    For i = 1 To unique_syms.Count
+        Cells(i + 1, 10).Value = unique_syms(i)
+    Next i
+        
+
+'USED FOR DEBUGGING 'Cells(1, 13).Value = Cells(2, 1).Value
+'USED FOR DEBUGGING 'Cells(1, 14).Value = Cells(2, 10).Value
+      
+'check to see if the distinct value = sym and total the volume if it does
+       'j loops through the master ticker list
+       'unique_index is used to stay on the correct distinct ticker
+        
+        unique_index = 1
+        For j = 2 To total_rows + 1
+            If Cells(j, 1).Value = Cells(unique_index + 1, 10).Value Then
+               total_volume = Cells(j, 7).Value + total_volume
+               
+            Else
+                Cells(volume_index + 1, 11).Value = total_volume
+                
+                'increase the unique index
+                unique_index = unique_index + 1
+                
+                'rest the sum of volume so it doesn't carry over for the next ticker
+                total_volume = 0
+                
+                'subtract 1 from j so you don't skip the first row for the next distinct ticker
+                j = j - 1
+            End If
+            
+        Next j
+    
+'USED FOR DEBUGGING 'Cells(1, 15).Value = total_volume
+    Next ws
+
+End Sub
