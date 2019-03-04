@@ -3,7 +3,6 @@ Sub stock_hw()
 Dim total_rows As Long
 Dim sym_array() As Variant
 Dim total_volume As Double
-Dim h As Long
 Dim i As Long
 Dim j As Long
 Dim unique_syms As New Collection, sym
@@ -14,9 +13,10 @@ Dim unique_index As Double
 'Creates the loop to go through each worksheet in the workbook
 For Each ws In Worksheets
 
-    'activate the worksheet
+    'activate the worksheet and enter new column names in J and K
     ws.Activate
-
+    Cells(1, 10).Value = "Ticker"
+    Cells(1, 11).Value = "Total Volume"
     'calculate the total rows to use in the array range
     total_rows = Rows(Rows.Count).End(xlUp).Row
     
@@ -52,7 +52,7 @@ For Each ws In Worksheets
                total_volume = Cells(j, 7).Value + total_volume
                
             Else
-                Cells(volume_index + 1, 11).Value = total_volume
+                Cells(unique_index + 1, 11).Value = total_volume
                 
                 'increase the unique index
                 unique_index = unique_index + 1
@@ -70,3 +70,6 @@ For Each ws In Worksheets
     Next ws
 
 End Sub
+
+
+
